@@ -20,5 +20,8 @@ import core.api_views
 
 urlpatterns = [
     path('api/v1/restaurants/', core.api_views.RestaurantList.as_view()),
+    path('api/v1/restaurants/<int:id>/',
+        core.api_views.RestaurantRetrieveUpdateDestroy.as_view()
+    ),
     path('admin/', admin.site.urls),
 ]
