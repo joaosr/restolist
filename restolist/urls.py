@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 import core.api_views
 
@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/v1/restaurants/<int:id>/',
         core.api_views.RestaurantRetrieveUpdateDestroy.as_view()
     ),
+    path('api/v1/rest-auth/', include('rest_auth.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -3,6 +3,26 @@ from core.models import Restaurant
 
 from django.contrib.auth.models import User
 
+class AuthenticationTestCase(APITestCase):
+    def setUp(self):
+        user = User.objects.create(username='admin')
+        user.set_password('123456')
+        user.save()
+        self.login_url = '/api/v1/rest-auth/login/'
+
+    def test_login_sucess(self):
+        response = self.client.post(self.login_url, {'username': 'admin','password': '123456'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_fail(self):
+        response = self.client.post(self.login_url, {'username': 'other','password': 'abcdef'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_logout(self):
+        self.client.login(username='admin',password='123456')
+        response = self.client.post('/api/v1/rest-auth/logout/')
+        self.assertEqual(response.status_code, 200)
+
 class RestaurantListTestCase(APITestCase):
     def test_list_restaurants(self):
         restaurants_count = Restaurant.objects.count()
@@ -22,6 +42,7 @@ class RestaurantUpdateTestCase(APITestCase):
 
     def test_update_restaurants(self):
         user = User(username='admin', password='123456')
+        user.save()
         self.client.force_authenticate(user=user)
         restaurant = Restaurant.objects.first()
         response = self.client.patch(

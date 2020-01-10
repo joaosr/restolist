@@ -3,8 +3,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework import authentication
 from rest_framework import exceptions
+
 
 from core.serializers import RestaurantSerializer
 from core.models import Restaurant
@@ -26,6 +28,7 @@ class RestaurantList(ListAPIView):
         return queryset
 
 class RestaurantRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Restaurant.objects.all()
     lookup_field = 'id'
