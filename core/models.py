@@ -8,5 +8,5 @@ class Restaurant(models.Model):
     category = models.CharField(max_length=50)
     address = models.TextField()
     phone = models.CharField(max_length=30)
-    website = models.URLField(max_length=200)
+    website = models.URLField(max_length=200, null=True, blank=True)
     created_at = models.DateTimeField('Created at', auto_now_add=True)

@@ -50,12 +50,27 @@ class RestaurantUpdateTestCase(APITestCase):
             {
                 'name': 'New Restaurant',
                 'description': 'Awesome Restaurant',
-                'address': 'street 1000',
+                'address': 'street 1000'
             },
             format='json',
         )
         updated = Restaurant.objects.get(id=restaurant.id)
         self.assertEqual(updated.name, 'New Restaurant')
+
+    def test_update_restaurants_website_blank(self):
+        user = User(username='admin', password='123456')
+        user.save()
+        self.client.force_authenticate(user=user)
+        restaurant = Restaurant.objects.first()
+        response = self.client.patch(
+            '/api/v1/restaurants/{}/'.format(restaurant.id),
+            {
+                'website': ''
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200)
 
     def test_update_restaurants_not_authenticated(self):
         restaurant = Restaurant.objects.first()
